@@ -28,7 +28,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "publish-lib": "ng build ngx-multi-date-picker && npm publish dist/ngx-multi-date-picker"
+    "publish-lib": "ng build && npm publish dist/ngx-multi-date-picker"
   },
   "private": false,
   "peerDependencies": {
