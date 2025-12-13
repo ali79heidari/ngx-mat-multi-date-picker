@@ -3,15 +3,15 @@ import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import dayjs, { Dayjs } from 'dayjs';
 import './dayjs-extensions';
 import { Subject } from 'rxjs';
-import * as jalaali from 'jalaali-js';
+import * as jalali from 'jalaali-js';
 
 
-export type CalendarType = 'gregorian' | 'jalaali' | 'hijri';
+export type CalendarType = 'gregorian' | 'jalali' | 'hijri';
 export type StartDayOfWeek = 'saturday' | 'sunday' | 'monday';
 
 @Injectable()
 export class MultiDateAdapter extends DateAdapter<Dayjs> {
-  private _calendarType: CalendarType = 'jalaali';
+  private _calendarType: CalendarType = 'jalali';
   private _customStartDay: number | null = null;
   // @ts-ignore
   override readonly changes = new Subject<void>();
@@ -46,7 +46,7 @@ export class MultiDateAdapter extends DateAdapter<Dayjs> {
   getYear(date: Dayjs): number {
     const d = this._ensureDate(date);
     if (!d) return 0;
-    if (this._calendarType === 'jalaali') return d.jYear();
+    if (this._calendarType === 'jalali') return d.jYear();
     if (this._calendarType === 'hijri') return d.iYear();
     return dayjs(d.valueOf()).year();
   }
@@ -54,7 +54,7 @@ export class MultiDateAdapter extends DateAdapter<Dayjs> {
   getMonth(date: Dayjs): number {
     const d = this._ensureDate(date);
     if (!d) return 0;
-    if (this._calendarType === 'jalaali') return d.jMonth();
+    if (this._calendarType === 'jalali') return d.jMonth();
     if (this._calendarType === 'hijri') return d.iMonth();
     return dayjs(d.valueOf()).month();
   }
@@ -62,7 +62,7 @@ export class MultiDateAdapter extends DateAdapter<Dayjs> {
   getDate(date: Dayjs): number {
     const d = this._ensureDate(date);
     if (!d) return 0;
-    if (this._calendarType === 'jalaali') return d.jDate();
+    if (this._calendarType === 'jalali') return d.jDate();
     if (this._calendarType === 'hijri') return d.iDate();
     return dayjs(d.valueOf()).date();
   }
@@ -73,7 +73,7 @@ export class MultiDateAdapter extends DateAdapter<Dayjs> {
   }
 
   getMonthNames(style: 'long' | 'short' | 'narrow'): string[] {
-    if (this._calendarType === 'jalaali') {
+    if (this._calendarType === 'jalali') {
       return ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
     }
     if (this._calendarType === 'hijri') {
@@ -92,7 +92,7 @@ export class MultiDateAdapter extends DateAdapter<Dayjs> {
   }
 
   getDayOfWeekNames(style: 'long' | 'short' | 'narrow'): string[] {
-    if (this._calendarType === 'jalaali') {
+    if (this._calendarType === 'jalali') {
         return ['یک‌شنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'جمعه', 'شنبه'];
     }
     return dayjs.weekdaysMin();
@@ -101,20 +101,20 @@ export class MultiDateAdapter extends DateAdapter<Dayjs> {
   getYearName(date: Dayjs): string {
     const d = this._ensureDate(date);
     if (!d) return '';
-    if (this._calendarType === 'jalaali') return String(d.jYear());
+    if (this._calendarType === 'jalali') return String(d.jYear());
     if (this._calendarType === 'hijri') return String(d.iYear());
     return String(d.year());
   }
 
   getFirstDayOfWeek(): number {
     if (this._customStartDay !== null) return this._customStartDay;
-    return this._calendarType === 'jalaali' ? 6 : 0;
+    return this._calendarType === 'jalali' ? 6 : 0;
   }
 
   getNumDaysInMonth(date: Dayjs): number {
     const d = this._ensureDate(date);
     if (!d) return 0;
-    if (this._calendarType === 'jalaali') return d.jDaysInMonth();
+    if (this._calendarType === 'jalali') return d.jDaysInMonth();
     if (this._calendarType === 'hijri') return d.iDaysInMonth();
     return d.daysInMonth();
   }
@@ -125,8 +125,8 @@ export class MultiDateAdapter extends DateAdapter<Dayjs> {
 
   createDate(year: number, month: number, date: number): Dayjs {
     // month is 0-indexed
-    if (this._calendarType === 'jalaali') {
-       const { gy, gm, gd } = jalaali.toGregorian(year, month + 1, date);
+    if (this._calendarType === 'jalali') {
+       const { gy, gm, gd } = jalali.toGregorian(year, month + 1, date);
        return dayjs(new Date(gy, gm - 1, gd)).locale(this.locale);
     }
     if (this._calendarType === 'hijri') {
@@ -155,14 +155,14 @@ export class MultiDateAdapter extends DateAdapter<Dayjs> {
         // @ts-ignore
         if (d.calendar) d = d.calendar('hijri');
     }
-    // For Jalaali we use standard gregorian backing, so no special calendar mode needed on the object itself other than for formatting?
+    // For Jalali we use standard gregorian backing, so no special calendar mode needed on the object itself other than for formatting?
     // Our jYear extension methods compute from gregorian.
     return d;
   }
 
   parse(value: any, parseFormat: any): Dayjs | null {
     if (value && typeof value === 'string') {
-        if (this._calendarType === 'jalaali') {
+        if (this._calendarType === 'jalali') {
             // value format 'jYYYY/jM/jD' or similar
             // We can split and use createDate
             const parts = value.split('/');
@@ -188,7 +188,7 @@ export class MultiDateAdapter extends DateAdapter<Dayjs> {
       throw Error('MultiDateAdapter: Cannot format invalid date.');
     }
 
-    if (this._calendarType === 'jalaali') {
+    if (this._calendarType === 'jalali') {
         const jYear = d.jYear();
         const jMonth = d.jMonth() + 1;
         const jDate = d.jDate();
@@ -211,7 +211,7 @@ export class MultiDateAdapter extends DateAdapter<Dayjs> {
 
   addCalendarYears(date: Dayjs, years: number): Dayjs {
     const d = this._ensureDate(date)!;
-    if (this._calendarType === 'jalaali') {
+    if (this._calendarType === 'jalali') {
         return d.jYear(d.jYear() + years);
     }
     if (this._calendarType === 'hijri') {
@@ -222,7 +222,7 @@ export class MultiDateAdapter extends DateAdapter<Dayjs> {
 
   addCalendarMonths(date: Dayjs, months: number): Dayjs {
     const d = this._ensureDate(date)!;
-     if (this._calendarType === 'jalaali') {
+     if (this._calendarType === 'jalali') {
         return d.jMonth(d.jMonth() + months);
     }
     if (this._calendarType === 'hijri') {

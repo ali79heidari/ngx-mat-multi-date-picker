@@ -61,7 +61,7 @@ export interface CustomHolidayRule {
   encapsulation: ViewEncapsulation.None
 })
 export class MultiDatepickerComponent implements OnChanges {
-  @Input() calendarType: CalendarType = 'jalaali';
+  @Input() calendarType: CalendarType = 'jalali';
   @Input() label: string = 'Choose a date';
   @Input() value: Dayjs | null = null;
   @Input() startDay: StartDayOfWeek | null = null;
@@ -69,7 +69,7 @@ export class MultiDatepickerComponent implements OnChanges {
   @Input() customGregorianHolidays: CustomHolidayRule[] = [];
   
   @Input() showGregorianHolidays: boolean = false;
-  @Input() showJalaaliHolidays: boolean = false;
+  @Input() showJalaliHolidays: boolean = false;
   @Input() showHijriHolidays: boolean = false;
 
   @Output() valueChange = new EventEmitter<Dayjs | null>();
@@ -79,7 +79,7 @@ export class MultiDatepickerComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     const shouldRefreshHolidays = 
       changes['showGregorianHolidays'] || 
-      changes['showJalaaliHolidays'] || 
+      changes['showJalaliHolidays'] || 
       changes['showHijriHolidays'] ||
       changes['weekendDays'] ||
       changes['customGregorianHolidays'];
@@ -151,8 +151,8 @@ export class MultiDatepickerComponent implements OnChanges {
       if (m === 11 && d === 25) isHoliday = true;
     }
 
-    // 2. Jalaali Holidays (Solar Hijri)
-    if (this.showJalaaliHolidays && !isHoliday) {
+    // 2. Jalali Holidays (Solar Hijri)
+    if (this.showJalaliHolidays && !isHoliday) {
         // Use our extension methods
        const jMonth = date.jMonth(); // 0-11
        const jDate = date.jDate();   // 1-31

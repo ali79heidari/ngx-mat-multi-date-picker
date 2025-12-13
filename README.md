@@ -1,63 +1,143 @@
-# NgxMultiDatePicker
+# NgxMatMultiDatePicker
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.0.
+A comprehensive, standalone Angular component that provides **Gregorian**, **Jalali (Persian)**, and **Hijri (Islamic)** calendars with built-in holiday highlighting and broad customization options. Built on top of Angular Material and Day.js.
 
-## Code scaffolding
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.1-green.svg)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Features
 
-```bash
-ng generate component component-name
-```
+- 📅 **Multi-Calendar Support**: Seamlessly switch between Gregorian, Jalali, and Hijri calendars.
+- 🎨 **Material Design**: Fully integrated with Angular Material's look and feel.
+- ⚡ **Standalone Component**: Easy to integrate without complex module setups.
+- 🏖️ **Holiday Highlighting**: Built-in support for official holidays in all three calendar systems.
+- 🛠️ **Customizable**: extensive configuration for start of week, weekend highlighting, and custom holidays.
+- 🌍 **Day.js Powered**: Uses the robust Day.js library for reliable date manipulation.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Installation
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the library, run:
+Install the package and its dependencies:
 
 ```bash
-ng build ngx-multi-date-picker
+npm install ngx-mat-multi-date-picker dayjs jalaali-js dayjs-hijri
 ```
 
-This command will compile your project, and the build artifacts will be placed in the `dist/` directory.
+_Ensure you have `@angular/material` and `@angular/cdk` installed as well._
 
-### Publishing the Library
+## Usage
 
-Once the project is built, you can publish your library by following these steps:
+### 1. Import Component
 
-1. Navigate to the `dist` directory:
-   ```bash
-   cd dist/ngx-multi-date-picker
-   ```
+Since `NgxMultiDatePicker` is a standalone component, you can import it directly into your component or module:
 
-2. Run the `npm publish` command to publish your library to the npm registry:
-   ```bash
-   npm publish
-   ```
+```typescript
+import { Component } from "@angular/core";
+import { MultiDatepickerComponent } from "ngx-mat-multi-date-picker";
+import dayjs, { Dayjs } from "dayjs";
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
+@Component({
+  selector: "app-root",
+  standalone: true,
+  imports: [MultiDatepickerComponent],
+  template: ` <ngx-multi-datepicker [(value)]="selectedDate" calendarType="jalali" [showJalaliHolidays]="true" label="Select Date"></ngx-multi-datepicker> `,
+})
+export class AppComponent {
+  selectedDate: Dayjs | null = dayjs();
+}
 ```
 
-## Running end-to-end tests
+### 2. Configuration Options
 
-For end-to-end (e2e) testing, run:
+The `<ngx-multi-datepicker>` component supports various inputs for customization:
 
-```bash
-ng e2e
+#### Basic Inputs
+
+| Input            | Type                                 | Default           | Description                                          |
+| ---------------- | ------------------------------------ | ----------------- | ---------------------------------------------------- |
+| `[value]`        | `Dayjs`                              | `null`            | The selected date value (two-way binding supported). |
+| `[label]`        | `string`                             | `'Choose a date'` | The floating label for the input field.              |
+| `[calendarType]` | `'gregorian' \| 'jalali' \| 'hijri'` | `'jalali'`        | The type of calendar to display.                     |
+
+#### Holiday & Weekend Settings
+
+| Input                     | Type                                 | Default | Description                                                           |
+| ------------------------- | ------------------------------------ | ------- | --------------------------------------------------------------------- |
+| `[showGregorianHolidays]` | `boolean`                            | `false` | Highlight official Gregorian holidays.                                |
+| `[showJalaliHolidays]`    | `boolean`                            | `false` | Highlight official Jalali (Persian) holidays.                         |
+| `[showHijriHolidays]`     | `boolean`                            | `false` | Highlight official Hijri (Islamic) holidays.                          |
+| `[weekendDays]`           | `number[]`                           | `[]`    | Array of day numbers to highlight as weekends (0=Sunday, 6=Saturday). |
+| `[startDay]`              | `'saturday' \| 'sunday' \| 'monday'` | `null`  | Sets the starting day of the week.                                    |
+
+#### Custom Holidays
+
+You can pass custom holiday rules for the Gregorian calendar:
+
+```typescript
+// Example: Mark January 15th of 2025 as a holiday
+customHolidays = [{ year: 2025, month: 1, days: [15] }];
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+```html
+<ngx-multi-datepicker [customGregorianHolidays]="customHolidays" ...></ngx-multi-datepicker>
+```
 
-## Additional Resources
+## Supported Holidays
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+The component includes built-in support for official holidays. These can be enabled or disabled via the `showGregorianHolidays`, `showJalaliHolidays`, and `showHijriHolidays` inputs.
+
+### 📅 Gregorian Holidays
+
+| Date       | Holiday   |
+| ---------- | --------- |
+| **Jan 1**  | New Year  |
+| **Dec 25** | Christmas |
+
+### 📅 Jalali (Persian) Holidays
+
+| Date                    | Holiday                         |
+| ----------------------- | ------------------------------- |
+| **1st - 4th Farvardin** | Nowruz (Persian New Year)       |
+| **12th Farvardin**      | Islamic Republic Day            |
+| **13th Farvardin**      | Nature Day (Sizdah Bedar)       |
+| **14th Khordad**        | Demise of Imam Khomeini         |
+| **15th Khordad**        | 15 Khordad Uprising             |
+| **22nd Bahman**         | Victory of Islamic Revolution   |
+| **29th Esfand**         | Nationalization of Oil Industry |
+| **30th Esfand**         | Public Holiday                  |
+
+### 📅 Hijri (Islamic) Holidays
+
+| Date                    | Holiday                          |
+| ----------------------- | -------------------------------- |
+| **9th Muharram**        | Tasua                            |
+| **10th Muharram**       | Ashura                           |
+| **20th Safar**          | Arbaeen                          |
+| **28th Safar**          | Demise of Prophet & Imam Hassan  |
+| **End of Safar**        | Martyrdom of Imam Reza           |
+| **8th Rabi al-Awwal**   | Martyrdom of Imam Hassan Askari  |
+| **17th Rabi al-Awwal**  | Birthday of Prophet & Imam Sadiq |
+| **3rd Jumada al-Thani** | Martyrdom of Hazrat Fatima       |
+| **13th Rajab**          | Birthday of Imam Ali             |
+| **27th Rajab**          | Mab'ath                          |
+| **15th Sha'ban**        | Birthday of Imam Mahdi           |
+| **21st Ramadan**        | Martyrdom of Imam Ali            |
+| **1st - 2nd Shawwal**   | Eid al-Fitr                      |
+| **25th Shawwal**        | Martyrdom of Imam Sadiq          |
+| **10th Dhu al-Hijjah**  | Eid al-Adha                      |
+| **18th Dhu al-Hijjah**  | Eid al-Ghadir                    |
+
+## Styling
+
+The component uses Angular Material's theming. Holidays are highlighted using the `.holiday-date` class, which applies a red color by default. You can override this in your global styles if needed.
+
+## Dependencies
+
+This library relies on the following peer dependencies:
+
+- Angular >= 20.0.0
+- Angular Material >= 20.0.0
+- Day.js >= 1.11.0
+
+## License
+
+MIT

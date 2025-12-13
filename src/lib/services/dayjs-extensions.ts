@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import * as jalaali from 'jalaali-js';
+import * as jalali from 'jalaali-js';
 // @ts-ignore
 import hijri from 'dayjs-hijri';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -36,46 +36,46 @@ declare module 'dayjs' {
   }
 }
 
-// Extract Jalaali logic
+// Extract Jalali logic
 const proto = dayjs.prototype as any;
 
-function getJalaali(d: any) {
+function getJalali(d: any) {
   // Ensure we use a standard Gregorian dayjs object
   const g = dayjs(d.valueOf());
   // @ts-ignore
-  return jalaali.toJalaali(g.year(), g.month() + 1, g.date());
+  return jalali.toJalaali(g.year(), g.month() + 1, g.date());
 }
 
 
 proto.jYear = function(v?: number) {
-  const jd = getJalaali(this);
+  const jd = getJalali(this);
   if (v === undefined) return jd.jy;
   // @ts-ignore
-  const { gy, gm, gd } = jalaali.toGregorian(v, jd.jm, jd.jd);
+  const { gy, gm, gd } = jalali.toGregorian(v, jd.jm, jd.jd);
   return this.year(gy).month(gm - 1).date(gd);
 };
 
 proto.jMonth = function(v?: number) {
-  const jd = getJalaali(this);
+  const jd = getJalali(this);
   if (v === undefined) return jd.jm - 1; 
   const targetMonth = v + 1;
   // @ts-ignore
-  const { gy, gm, gd } = jalaali.toGregorian(jd.jy, targetMonth, jd.jd);
+  const { gy, gm, gd } = jalali.toGregorian(jd.jy, targetMonth, jd.jd);
   return this.year(gy).month(gm - 1).date(gd);
 };
 
 proto.jDate = function(v?: number) {
-  const jd = getJalaali(this);
+  const jd = getJalali(this);
   if (v === undefined) return jd.jd;
   // @ts-ignore
-  const { gy, gm, gd } = jalaali.toGregorian(jd.jy, jd.jm, v);
+  const { gy, gm, gd } = jalali.toGregorian(jd.jy, jd.jm, v);
   return this.year(gy).month(gm - 1).date(gd);
 };
 
 proto.jDaysInMonth = function() {
-    const jd = getJalaali(this);
+    const jd = getJalali(this);
     // @ts-ignore
-    return jalaali.jalaaliMonthLength(jd.jy, jd.jm);
+    return jalali.jalaaliMonthLength(jd.jy, jd.jm);
 }
 
 // Hijri
