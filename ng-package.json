@@ -3,5 +3,9 @@
   "dest": "dist/ngx-multi-date-picker",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "allowedNonPeerDependencies": [
+    "jalaali-js",
+    "dayjs-hijri"
+  ]
 }

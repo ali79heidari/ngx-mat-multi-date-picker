@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import * as jalaali from 'jalaali-js';
+// @ts-ignore
 import hijri from 'dayjs-hijri';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import utc from 'dayjs/plugin/utc';

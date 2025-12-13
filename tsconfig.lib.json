@@ -6,11 +6,13 @@
     "outDir": "./out-tsc/lib",
     "declaration": true,
     "declarationMap": true,
+    "sourceMap": true,
     "inlineSources": true,
     "types": []
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "src/**/*.d.ts"
   ],
   "exclude": [
     "**/*.spec.ts"
