@@ -19,7 +19,7 @@ A comprehensive, standalone Angular component that provides **Gregorian**, **Jal
 Install the package and its dependencies:
 
 ```bash
-npm install ngx-mat-multi-date-picker dayjs jalaali-js dayjs-hijri
+npm install ngx-mat-multi-date-picker
 ```
 
 _Ensure you have `@angular/material` and `@angular/cdk` installed as well._
