@@ -1,6 +1,6 @@
 {
   "name": "ngx-mat-multi-date-picker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A standalone Angular component that provides Gregorian, Jalaali (Persian) and Hijri (Islamic) calendars with built‑in holiday highlighting and custom holiday support.",
   "keywords": [
     "angular",
@@ -27,26 +27,25 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "publish-lib": "ng build ngx-multi-date-picker && npm publish dist/ngx-multi-date-picker"
   },
   "private": false,
-  "dependencies": {
-    "@angular/animations": "^20.3.15",
-    "@angular/cdk": "^20.2.14",
+  "peerDependencies": {
     "@angular/common": "^20.0.0",
-    "@angular/compiler": "^20.0.0",
     "@angular/core": "^20.0.0",
-    "@angular/forms": "^20.0.0",
-    "@angular/material": "^20.2.14",
-    "@angular/platform-browser": "^20.0.0",
-    "@angular/router": "^20.0.0",
-    "dayjs": "^1.11.19",
-    "dayjs-hijri": "^1.0.1",
-    "jalaali-js": "^1.2.8",
-    "rxjs": "~7.8.0",
-    "tslib": "^2.3.0",
-    "zone.js": "~0.15.0"
+    "@angular/material": "^20.0.0",
+    "@angular/cdk": "^20.0.0",
+    "dayjs": "^1.11.0"
   },
+  "dependencies": {
+    "tslib": "^2.3.0",
+    "jalaali-js": "^1.2.0",
+    "dayjs-hijri": "^2.1.0"
+  },
+  "sideEffects": [
+    "src/lib/services/dayjs-extensions.ts"
+  ],
   "devDependencies": {
     "@angular/build": "^20.3.13",
     "@angular/cli": "^20.0.0",
