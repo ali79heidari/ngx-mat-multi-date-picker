@@ -1,6 +1,6 @@
 {
   "name": "ngx-mat-multi-date-picker",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A standalone Angular component that provides Gregorian, Jalali (Persian) and Hijri (Islamic) calendars with built‑in holiday highlighting and custom holiday support.",
   "keywords": [
     "angular",
