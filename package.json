@@ -17,7 +17,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ali-heidari/ngx-multi-date-picker.git"
+    "url": "https://github.com/ali79heidari/ngx-mat-multi-date-picker"
   },
   "main": "dist/ngx-multi-date-picker/bundles/ngx-multi-date-picker.umd.js",
   "module": "dist/ngx-multi-date-picker/fesm2022/ngx-multi-date-picker.js",
