@@ -5,6 +5,8 @@ A comprehensive, standalone Angular component that provides **Gregorian**, **Jal
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Version](https://img.shields.io/badge/version-1.0.1-green.svg)
 
+[demo](https://stackblitz.com/~/github.com/ali79heidari/demo-ngx-mat-multi-date-picker)
+
 ## Features
 
 - 📅 **Multi-Calendar Support**: Seamlessly switch between Gregorian, Jalali, and Hijri calendars.
