@@ -1,189 +1,199 @@
 # NgxMatMultiDatePicker
 
-A comprehensive, standalone Angular component that provides **Gregorian**, **Jalali (Persian)**, and **Hijri (Islamic)** calendars with built-in holiday highlighting and broad customization options. Built on top of Angular Material and Day.js.
+A comprehensive, standalone Angular library providing high-quality **Gregorian**, **Jalali (Persian)**, and **Hijri (Islamic)** date pickers. It is built on top of Angular Material and Day.js, offering seamless integration, built-in holiday highlighting, and extensive customization options.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Version](https://img.shields.io/badge/version-1.0.1-green.svg)
+![Angular](https://img.shields.io/badge/Angular-20%2B-red)
 
-[demo](https://stackblitz.com/~/github.com/ali79heidari/demo-ngx-mat-multi-date-picker)
+[**Live Demo**](https://stackblitz.com/~/github.com/ali79heidari/demo-ngx-mat-multi-date-picker)
 
-## Features
+## Key Features
 
-- 📅 **Multi-Calendar Support**: Seamlessly switch between Gregorian, Jalali, and Hijri calendars.
-- 🎨 **Material Design**: Fully integrated with Angular Material's look and feel.
-- ⚡ **Standalone Component**: Easy to integrate without complex module setups.
-- 🏖️ **Holiday Highlighting**: Built-in support for official holidays in all three calendar systems.
-- 🛠️ **Customizable**: extensive configuration for start of week, weekend highlighting, and custom holidays.
-- 🌍 **Day.js Powered**: Uses the robust Day.js library for reliable date manipulation.
+- **Multiple Calendar Systems**: Fully functional Gregorian, Jalali (Solar Hijri), and Hijri (Lunar) calendars.
+- **Three Standalone Components**:
+  - `MultiDatepickerComponent`: Standard input-based date picker.
+  - `MultiDateRangePickerComponent`: Select start and end dates.
+  - `MultiCalendarComponent`: Inline calendar view.
+- **Holiday Highlighting**: Built-in official holidays for all three calendar systems.
+- **Customization**: Configure start day of week, weekend days, custom holidays, and theming.
+- **Picker Modes**: Support for standard date picking, month & year only, or year only.
+- **Angular Material Native**: Built directly on `MatDatepicker`, ensuring complete compatibility with Material Design.
+- **Day.js Powered**: Uses the lightweight and immutable Day.js library for all date manipulations.
 
 ## Installation
 
-Install the package and its dependencies:
+Install the package via npm:
 
 ```bash
 npm install ngx-mat-multi-date-picker
 ```
 
-_Ensure you have `@angular/material` and `@angular/cdk` installed as well._
+## Getting Started
 
-## Usage
+### 1. Import Components
 
-### 1. Import Component
-
-Since `NgxMultiDatePicker` is a standalone component, you can import it directly into your component or module:
+The library provides standalone components. Import the ones you need directly into your component imports:
 
 ```typescript
 import { Component } from "@angular/core";
-import { MultiDatepickerComponent } from "ngx-mat-multi-date-picker";
+import { MultiDatepickerComponent, MultiDateRangePickerComponent } from "ngx-mat-multi-date-picker";
 import dayjs, { Dayjs } from "dayjs";
 
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [MultiDatepickerComponent],
-  template: ` <ngx-multi-datepicker [(value)]="selectedDate" calendarType="jalali" [showJalaliHolidays]="true" label="Select Date"></ngx-multi-datepicker> `,
+  imports: [MultiDatepickerComponent, MultiDateRangePickerComponent],
+  template: `
+    <!-- Simple Datepicker -->
+    <ngx-multi-datepicker [(value)]="date" calendarType="jalali"></ngx-multi-datepicker>
+
+    <!-- Range Picker -->
+    <ngx-multi-date-range-picker [(start)]="start" [(end)]="end" calendarType="gregorian"></ngx-multi-date-range-picker>
+  `,
 })
 export class AppComponent {
-  selectedDate: Dayjs | null = dayjs();
+  date: Dayjs | null = dayjs();
+  start: Dayjs | null = dayjs();
+  end: Dayjs | null = dayjs().add(7, "day");
 }
 ```
 
-### 2. Configuration Options
+## detailed API Documentation
 
-The `<ngx-multi-datepicker>` component supports various inputs for customization:
+### 1. `<ngx-multi-datepicker>`
 
-#### Basic Inputs
+The primary component for selecting a single date.
 
-| Input            | Type                                 | Default           | Description                                          |
-| ---------------- | ------------------------------------ | ----------------- | ---------------------------------------------------- |
-| `[value]`        | `Dayjs`                              | `null`            | The selected date value (two-way binding supported). |
-| `[label]`        | `string`                             | `'Choose a date'` | The floating label for the input field.              |
-| `[calendarType]` | `'gregorian' \| 'jalali' \| 'hijri'` | `'jalali'`        | The type of calendar to display.                     |
+#### Inputs
 
-#### Holiday & Weekend Settings
+| Input Name                | Type                                 | Default           | Description                                                |
+| ------------------------- | ------------------------------------ | ----------------- | ---------------------------------------------------------- |
+| `[value]`                 | `Dayjs`                              | `null`            | The selected date (supports two-way binding).              |
+| `[calendarType]`          | `'gregorian' \| 'jalali' \| 'hijri'` | `'jalali'`        | The calendar system to use.                                |
+| `[label]`                 | `string`                             | `'Choose a date'` | Floating label for the input.                              |
+| `[pickerMode]`            | `'date' \| 'month-year' \| 'year'`   | `'date'`          | View mode: standard date, month & year only, or year only. |
+| `[showJalaliHolidays]`    | `boolean`                            | `false`           | Highlight official Jalali holidays (red).                  |
+| `[showGregorianHolidays]` | `boolean`                            | `false`           | Highlight official Gregorian holidays.                     |
+| `[showHijriHolidays]`     | `boolean`                            | `false`           | Highlight official Hijri holidays.                         |
+| `[startDay]`              | `'saturday' \| 'sunday' \| 'monday'` | `null`            | First day of the week.                                     |
+| `[weekendDays]`           | `number[]`                           | `[]`              | Days to mark as weekend (0=Sun, 6=Sat).                    |
+| `[min]`                   | `Dayjs`                              | `null`            | Minimum selectable date.                                   |
+| `[max]`                   | `Dayjs`                              | `null`            | Maximum selectable date.                                   |
+| `[disabled]`              | `boolean`                            | `false`           | Disables the input and picker.                             |
+| `[touchUi]`               | `boolean`                            | `false`           | Enables touch-friendly dialog mode.                        |
+| `[dateFilter]`            | `(d: Dayjs) => boolean`              | `() => true`      | Function to disable specific dates.                        |
+| `[dateClass]`             | `(d: Dayjs) => any`                  | `null`            | Custom CSS class function for calendar cells.              |
 
-| Input                     | Type                                 | Default | Description                                                           |
-| ------------------------- | ------------------------------------ | ------- | --------------------------------------------------------------------- |
-| `[showGregorianHolidays]` | `boolean`                            | `false` | Highlight official Gregorian holidays.                                |
-| `[showJalaliHolidays]`    | `boolean`                            | `false` | Highlight official Jalali (Persian) holidays.                         |
-| `[showHijriHolidays]`     | `boolean`                            | `false` | Highlight official Hijri (Islamic) holidays.                          |
-| `[weekendDays]`           | `number[]`                           | `[]`    | Array of day numbers to highlight as weekends (0=Sunday, 6=Saturday). |
-| `[startDay]`              | `'saturday' \| 'sunday' \| 'monday'` | `null`  | Sets the starting day of the week.                                    |
+#### Outputs
 
-#### Custom Holidays
+| Output Event      | Type    | Description                                          |
+| ----------------- | ------- | ---------------------------------------------------- |
+| `(valueChange)`   | `Dayjs` | Emitted when value is updated.                       |
+| `(opened)`        | `void`  | Emitted when picker opens.                           |
+| `(closed)`        | `void`  | Emitted when picker closes.                          |
+| `(monthSelected)` | `Dayjs` | Emitted when a month is selected in Multi-Year view. |
+| `(yearSelected)`  | `Dayjs` | Emitted when a year is selected in Multi-Year view.  |
 
-You can pass custom holiday rules for the Gregorian calendar:
+---
+
+### 2. `<ngx-multi-date-range-picker>`
+
+Allows selection of a start and end date range.
+
+#### Inputs
+
+| Input Name                | Type                                 | Default                | Description                   |
+| ------------------------- | ------------------------------------ | ---------------------- | ----------------------------- |
+| `[start]`                 | `Dayjs`                              | `null`                 | Start date (two-way binding). |
+| `[end]`                   | `Dayjs`                              | `null`                 | End date (two-way binding).   |
+| `[calendarType]`          | `'gregorian' \| 'jalali' \| 'hijri'` | `'jalali'`             | Calendar system.              |
+| `[label]`                 | `string`                             | `'Enter a date range'` | Input label.                  |
+| `[min]`, `[max]`          | `Dayjs`                              | `null`                 | Date constraints.             |
+| `[showJalaliHolidays]`    | `boolean`                            | `false`                | Highlight Jalali holidays.    |
+| `[showGregorianHolidays]` | `boolean`                            | `false`                | Highlight Gregorian holidays. |
+| `[showHijriHolidays]`     | `boolean`                            | `false`                | Highlight Hijri holidays.     |
+
+_(Supports strictly the same holiday and configuration inputs as the single datepicker)_
+
+---
+
+### 3. `<ngx-multi-calendar>`
+
+An inline calendar component that is always visible.
+
+#### Inputs
+
+| Input Name       | Type                                 | Description                                |
+| ---------------- | ------------------------------------ | ------------------------------------------ |
+| `[selected]`     | `Dayjs`                              | Currently selected date (two-way binding). |
+| `[calendarType]` | `'gregorian' \| 'jalali' \| 'hijri'` | Calendar system type.                      |
+| `[startView]`    | `'month' \| 'year' \| 'multi-year'`  | Initial view mode.                         |
+
+_(Supports all standard holiday and min/max inputs)_
+
+---
+
+## Advanced Usage
+
+### Custom Holidays
+
+You can define your own rules for highlighting dates (currently supported for Gregorian custom rules via input).
 
 ```typescript
-// Example: Mark January 15th of 2025 as a holiday
-customHolidays = [{ year: 2025, month: 1, days: [15] }];
+// Define custom holidays (e.g. Company Retreat on Jan 15th and 20th)
+myCustomHolidays: CustomHolidayRule[] = [
+  { year: 2025, month: 1, days: [15, 20] }
+];
 ```
 
 ```html
-<ngx-multi-datepicker [customGregorianHolidays]="customHolidays" ...></ngx-multi-datepicker>
+<ngx-multi-datepicker [customGregorianHolidays]="myCustomHolidays"></ngx-multi-datepicker>
 ```
 
-### 3. Year & Month Picker
+### Date Formatting
 
-To emulate a Year and Month picker (hiding days), use the `pickerMode` input:
+The library uses a custom `MultiDateAdapter`. Display formats are handled automatically based on the selected `calendarType`.
 
-```html
-<ngx-multi-datepicker pickerMode="month-year" label="Select Month & Year"></ngx-multi-datepicker>
+- **Gregorian**: `YYYY/MM/DD`
+- **Jalali**: `YYYY/MM/DD` (Solar Hijri year/month)
+- **Hijri**: `YYYY/MM/DD` (Lunar Hijri year/month)
+
+### Theming
+
+The component uses Angular Material's standard theming system.
+
+- **Holidays**: Marked with the `.holiday-date` CSS class (default: `color: red`).
+- **Weekends**: You can style them if you pass `weekendDays` and add custom CSS to matching cells if needed, or rely on dateClass.
+
+To override holiday colors globally:
+
+```css
+.holiday-date .mat-calendar-body-cell-content {
+  color: #ff4081 !important; /* Your custom color */
+  font-weight: bold;
+}
 ```
 
-Supported modes: `'date'` (default), `'month-year'`, `'year'`.
+## Built-in Holiday Data
 
-### 4. Inline Calendar
+The library includes comprehensive lists of official holidays.
 
-For an always-visible inline calendar, use the `<ngx-multi-calendar>` component:
+**Jalali (Persian)**: Nowruz (1-4 Farvardin), Islamic Republic Day (12 Farvardin), Sizdah Bedar, 14 & 15 Khordad, 22 Bahman, 29 Esfand, etc.
 
-```typescript
-import { MultiCalendarComponent } from "ngx-mat-multi-date-picker";
+**Hijri (Islamic)**: Tasua, Ashura, Arbaeen, Prophet's Demise, Eid al-Fitr, Eid al-Adha, Eid al-Ghadir, and more.
 
-@Component({
-  imports: [MultiCalendarComponent],
-  template: ` <ngx-multi-calendar [(selected)]="selectedDate"></ngx-multi-calendar> `,
-})
-```
+**Gregorian**: New Year (Jan 1), Christmas (Dec 25).
 
-Supported inputs are similar to the datepicker (min, max, holidays, etc.).
+## Tech Stack & Compatibility
 
-### 5. Date Range Picker
-
-For selecting a start and end date, use the `<ngx-multi-date-range-picker>` component:
-
-```typescript
-import { MultiDateRangePickerComponent } from "ngx-mat-multi-date-picker";
-
-@Component({
-  imports: [MultiDateRangePickerComponent],
-  template: `
-    <ngx-multi-date-range-picker
-      [(start)]="startDate"
-      [(end)]="endDate"
-      label="Choose a range">
-    </ngx-multi-date-range-picker>
-  `,
-})
-```
-
-## Supported Holidays
-
-The component includes built-in support for official holidays. These can be enabled or disabled via the `showGregorianHolidays`, `showJalaliHolidays`, and `showHijriHolidays` inputs.
-
-### 📅 Gregorian Holidays
-
-| Date       | Holiday   |
-| ---------- | --------- |
-| **Jan 1**  | New Year  |
-| **Dec 25** | Christmas |
-
-### 📅 Jalali (Persian) Holidays
-
-| Date                    | Holiday                         |
-| ----------------------- | ------------------------------- |
-| **1st - 4th Farvardin** | Nowruz (Persian New Year)       |
-| **12th Farvardin**      | Islamic Republic Day            |
-| **13th Farvardin**      | Nature Day (Sizdah Bedar)       |
-| **14th Khordad**        | Demise of Imam Khomeini         |
-| **15th Khordad**        | 15 Khordad Uprising             |
-| **22nd Bahman**         | Victory of Islamic Revolution   |
-| **29th Esfand**         | Nationalization of Oil Industry |
-| **30th Esfand**         | Public Holiday                  |
-
-### 📅 Hijri (Islamic) Holidays
-
-| Date                    | Holiday                          |
-| ----------------------- | -------------------------------- |
-| **9th Muharram**        | Tasua                            |
-| **10th Muharram**       | Ashura                           |
-| **20th Safar**          | Arbaeen                          |
-| **28th Safar**          | Demise of Prophet & Imam Hassan  |
-| **End of Safar**        | Martyrdom of Imam Reza           |
-| **8th Rabi al-Awwal**   | Martyrdom of Imam Hassan Askari  |
-| **17th Rabi al-Awwal**  | Birthday of Prophet & Imam Sadiq |
-| **3rd Jumada al-Thani** | Martyrdom of Hazrat Fatima       |
-| **13th Rajab**          | Birthday of Imam Ali             |
-| **27th Rajab**          | Mab'ath                          |
-| **15th Sha'ban**        | Birthday of Imam Mahdi           |
-| **21st Ramadan**        | Martyrdom of Imam Ali            |
-| **1st - 2nd Shawwal**   | Eid al-Fitr                      |
-| **25th Shawwal**        | Martyrdom of Imam Sadiq          |
-| **10th Dhu al-Hijjah**  | Eid al-Adha                      |
-| **18th Dhu al-Hijjah**  | Eid al-Ghadir                    |
-
-## Styling
-
-The component uses Angular Material's theming. Holidays are highlighted using the `.holiday-date` class, which applies a red color by default. You can override this in your global styles if needed.
-
-## Dependencies
-
-This library relies on the following peer dependencies:
-
-- Angular >= 20.0.0
-- Angular Material >= 20.0.0
-- Day.js >= 1.11.0
+| Package          | Version |
+| ---------------- | ------- |
+| Angular          | ^20.0.0 |
+| Angular Material | ^20.0.0 |
+| Day.js           | ^1.11.0 |
+| jalaali-js       | ^1.2.0  |
+| dayjs-hijri      | ^1.0.1  |
 
 ## License
 
-MIT
+MIT License.
