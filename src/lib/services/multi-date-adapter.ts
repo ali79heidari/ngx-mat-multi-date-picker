@@ -163,17 +163,17 @@ export class MultiDateAdapter extends DateAdapter<Dayjs> {
   parse(value: any, parseFormat: any): Dayjs | null {
     if (value && typeof value === 'string') {
         if (this._calendarType === 'jalali') {
-            // value format 'jYYYY/jM/jD' or similar
-            // We can split and use createDate
-            const parts = value.split('/');
-            if (parts.length === 3) {
+            // Attempt to parse as Jalali YYYY/MM/DD
+            // We strip any non-digit separators
+            const parts = value.match(/(\d+)/g);
+            if (parts && parts.length >= 3) {
+                // Assumption: Year Month Date order
                 return this.createDate(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
             }
         }
         if (this._calendarType === 'hijri') {
-             // Try strict parsing if format is known, else split
-            const parts = value.split('/');
-            if (parts.length === 3) {
+            const parts = value.match(/(\d+)/g);
+             if (parts && parts.length >= 3) {
                 return this.createDate(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
             }
         }
@@ -190,21 +190,38 @@ export class MultiDateAdapter extends DateAdapter<Dayjs> {
 
     if (this._calendarType === 'jalali') {
         const jYear = d.jYear();
-        const jMonth = d.jMonth() + 1;
+        const jMonth = d.jMonth(); // 0-indexed
         const jDate = d.jDate();
-        // Simple format implementation for now
-        // if displayFormat contains jMM it should replace.
-        // We can just return standard YYYY/MM/DD style
-        const pad = (n: number) => n < 10 ? '0' + n : n;
-        return `${jYear}/${pad(jMonth)}/${pad(jDate)}`;
+        const jDay = d.day();
+        
+        let formatStr = typeof displayFormat === 'string' ? displayFormat : 'YYYY/MM/DD';
+        
+        const monthNames = this.getMonthNames('long');
+        const monthNamesShort = this.getMonthNames('short');
+        const dayNames = this.getDayOfWeekNames('long');
+        const dayNamesShort = this.getDayOfWeekNames('short');
+        
+        const pad = (n: number) => n < 10 ? '0' + n : String(n);
+        
+        // Manual replacement for Jalali
+        return formatStr
+            .replace(/YYYY/g, String(jYear))
+            .replace(/YY/g, String(jYear).slice(-2))
+            .replace(/MMMM/g, monthNames[jMonth])
+            .replace(/MMM/g, monthNamesShort[jMonth] || monthNames[jMonth])
+            .replace(/MM/g, pad(jMonth + 1))
+            .replace(/M/g, String(jMonth + 1))
+            .replace(/DD/g, pad(jDate))
+            .replace(/D/g, String(jDate))
+            .replace(/dddd/g, dayNames[jDay])
+            .replace(/ddd/g, dayNamesShort[jDay]);
     }
+    
     if (this._calendarType === 'hijri') {
-        // Use standard format tokens with calendar('hijri') instance
         // @ts-ignore
         if (d.calendar) return d.calendar('hijri').format(displayFormat || 'YYYY/MM/DD');
         return d.format(displayFormat || 'YYYY/MM/DD');
     }
-
 
     return d.format(displayFormat || 'YYYY/MM/DD');
   }

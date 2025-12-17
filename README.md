@@ -83,6 +83,50 @@ customHolidays = [{ year: 2025, month: 1, days: [15] }];
 <ngx-multi-datepicker [customGregorianHolidays]="customHolidays" ...></ngx-multi-datepicker>
 ```
 
+### 3. Year & Month Picker
+
+To emulate a Year and Month picker (hiding days), use the `pickerMode` input:
+
+```html
+<ngx-multi-datepicker pickerMode="month-year" label="Select Month & Year"></ngx-multi-datepicker>
+```
+
+Supported modes: `'date'` (default), `'month-year'`, `'year'`.
+
+### 4. Inline Calendar
+
+For an always-visible inline calendar, use the `<ngx-multi-calendar>` component:
+
+```typescript
+import { MultiCalendarComponent } from "ngx-mat-multi-date-picker";
+
+@Component({
+  imports: [MultiCalendarComponent],
+  template: ` <ngx-multi-calendar [(selected)]="selectedDate"></ngx-multi-calendar> `,
+})
+```
+
+Supported inputs are similar to the datepicker (min, max, holidays, etc.).
+
+### 5. Date Range Picker
+
+For selecting a start and end date, use the `<ngx-multi-date-range-picker>` component:
+
+```typescript
+import { MultiDateRangePickerComponent } from "ngx-mat-multi-date-picker";
+
+@Component({
+  imports: [MultiDateRangePickerComponent],
+  template: `
+    <ngx-multi-date-range-picker
+      [(start)]="startDate"
+      [(end)]="endDate"
+      label="Choose a range">
+    </ngx-multi-date-range-picker>
+  `,
+})
+```
+
 ## Supported Holidays
 
 The component includes built-in support for official holidays. These can be enabled or disabled via the `showGregorianHolidays`, `showJalaliHolidays`, and `showHijriHolidays` inputs.
